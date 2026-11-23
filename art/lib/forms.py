@@ -66,12 +66,14 @@ class Builder:
             elif bone:
                 v[self.dl][self.group(bone)] = 1.0
 
-    def _finish(self, verts, faces=None, color=0xff00ff, jitter=0.0, emit=0.0, bone=None, weights=None, closed=True):
+    def _finish(self, verts, faces=None, color=0xff00ff, jitter=0.0, emit=0.0, bone=None, weights=None, closed=True, flip=False):
         if faces is None:
             vs = set(verts)
             faces = list({f for v in verts for f in v.link_faces if all(x in vs for x in f.verts)})
         if closed and faces:
             bmesh.ops.recalc_face_normals(self.bm, faces=faces)
+        if flip and faces:
+            bmesh.ops.reverse_faces(self.bm, faces=faces)
         for f in faces:
             f.smooth = False
             f.normal_update()
@@ -319,7 +321,7 @@ class Builder:
         return self._finish(verts, faces, **kw)
 
     # ------------------------------------------------------------ output
-    def to_object(self, name, coll):
+    def to_object(self, name, coll, material=None):
         me = bpy.data.meshes.new(name)
         self.bm.normal_update()
         self.bm.to_mesh(me)
@@ -328,7 +330,7 @@ class Builder:
         coll.objects.link(ob)
         for g in self.groups:
             ob.vertex_groups.new(name=g)
-        me.materials.append(core.vertex_color_material())
+        me.materials.append(material or core.vertex_color_material())
         ca = me.color_attributes.get(core.COLOR_ATTR)
         if ca is not None:
             me.color_attributes.active_color = ca

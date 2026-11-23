@@ -110,6 +110,46 @@ def vertex_color_material():
     return m
 
 
+GLOW_MATERIAL = 'AF_Glow'
+
+
+def glow_material():
+    """Emission-only material for glow shells (blade auras, the hex shield). Unity maps it to an additive unlit shader."""
+    m = bpy.data.materials.get(GLOW_MATERIAL)
+    if m:
+        return m
+    m = bpy.data.materials.new(GLOW_MATERIAL)
+    try:
+        m.use_nodes = True
+    except Exception:
+        pass
+    nt = m.node_tree
+    for n in list(nt.nodes):
+        if n.type != 'OUTPUT_MATERIAL':
+            nt.nodes.remove(n)
+    out = next(n for n in nt.nodes if n.type == 'OUTPUT_MATERIAL')
+    attr = nt.nodes.new('ShaderNodeVertexColor')
+    attr.layer_name = COLOR_ATTR
+    em = nt.nodes.new('ShaderNodeEmission')
+    em.inputs['Strength'].default_value = 1.2
+    tr = nt.nodes.new('ShaderNodeBsdfTransparent')
+    add = nt.nodes.new('ShaderNodeAddShader')
+    mixk = nt.nodes.new('ShaderNodeMath')
+    mixk.operation = 'MULTIPLY'
+    mixk.inputs[1].default_value = 0.8
+    nt.links.new(attr.outputs['Color'], em.inputs['Color'])
+    nt.links.new(attr.outputs['Alpha'], mixk.inputs[0])
+    nt.links.new(mixk.outputs[0], em.inputs['Strength'])
+    nt.links.new(tr.outputs[0], add.inputs[0])
+    nt.links.new(em.outputs[0], add.inputs[1])
+    nt.links.new(add.outputs[0], out.inputs['Surface'])
+    try:
+        m.surface_render_method = 'BLENDED'
+    except Exception:
+        pass
+    return m
+
+
 def rng(seed):
     return random.Random(seed)
 

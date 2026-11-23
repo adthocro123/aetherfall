@@ -1,0 +1,17 @@
+{
+  "name": "Gauntlet_R",
+  "kind": "gear",
+  "group": "gear",
+  "triangles": 272,
+  "fbx": "fbx/Gauntlet_R.fbx",
+  "glb": "glb/Gauntlet_R.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {},
+  "hitSpheres": [],
+  "notes": "Right hand, closed around the sword grip axis (Y). Knuckles face +X in Blender."
+}

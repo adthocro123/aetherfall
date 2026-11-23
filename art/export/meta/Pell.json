@@ -1,0 +1,54 @@
+{
+  "name": "Pell",
+  "kind": "humanoid",
+  "group": "characters",
+  "triangles": 2104,
+  "fbx": "fbx/Pell.fbx",
+  "glb": "glb/Pell.glb",
+  "bones": 21,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "Humanoid"
+  },
+  "clips": [
+    {
+      "name": "Idle",
+      "take": "Pell|Idle",
+      "frames": 90,
+      "fps": 30,
+      "seconds": 3.0,
+      "loop": true,
+      "note": "At the camp, turning to face the player (rotate the object)."
+    },
+    {
+      "name": "Talk",
+      "take": "Pell|Talk",
+      "frames": 72,
+      "fps": 30,
+      "seconds": 2.4,
+      "loop": true,
+      "note": "Loop while her dialogue panel is open."
+    },
+    {
+      "name": "Wave",
+      "take": "Pell|Wave",
+      "frames": 40,
+      "fps": 30,
+      "seconds": 1.333,
+      "loop": true,
+      "note": "The gesture when a quest starts (npc.js gesture)."
+    }
+  ],
+  "sockets": {
+    "Head": {
+      "bone": "Head",
+      "position": [
+        0,
+        2.15,
+        0.05
+      ]
+    }
+  },
+  "hitSpheres": [],
+  "notes": "Unity: import with Rig > Animation Type = Humanoid; the T-pose and bone names auto-map. Her clips convert to muscle space, and stock humanoid clips retarget onto her."
+}

@@ -82,8 +82,8 @@ def main():
         export.write_json(os.path.join(a.out, 'meta', f'{name}.json'), meta)
 
         if not a.no_preview:
-            preview.setup()
             pv = res.preview
+            preview.setup(dark=pv.get('dark', False))
             vis = [o for o in objs if o.type == 'MESH']
             preview.frame(vis, pv.get('yaw', -32), pv.get('pitch', 16), pv.get('margin', 1.08), ground_z=pv.get('ground_z'))
             preview.render(os.path.join(a.previews, f'{name}.jpg'), pv.get('size', 512))

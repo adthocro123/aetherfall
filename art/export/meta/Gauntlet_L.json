@@ -1,0 +1,26 @@
+{
+  "name": "Gauntlet_L",
+  "kind": "gear",
+  "group": "gear",
+  "triangles": 350,
+  "fbx": "fbx/Gauntlet_L.fbx",
+  "glb": "glb/Gauntlet_L.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {
+    "Rune": {
+      "bone": null,
+      "position": [
+        0,
+        -0.03,
+        -0.0
+      ]
+    }
+  },
+  "hitSpheres": [],
+  "notes": "Left hand, open, palm down (-Z in Blender); bolts and the shield come from the Rune socket."
+}

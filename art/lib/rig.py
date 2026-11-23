@@ -56,6 +56,23 @@ def chain(names, points, parent=None, **kw):
     return out
 
 
+def seg_weights(segs, power=4.0, top=2):
+    """Smooth skin weights: inverse distance from a vertex to each bone segment, keeping the nearest `top`.
+    segs: {bone: (head, tail)}. Returns a function co -> {bone: weight} for Builder(weights=...)."""
+    S = {b: (Vector(h), Vector(t)) for b, (h, t) in segs.items()}
+
+    def dist(p, a, b):
+        ab = b - a
+        L = ab.length_squared
+        k = 0.0 if L < 1e-12 else max(0.0, min(1.0, (p - a).dot(ab) / L))
+        return (a + ab * k - p).length
+
+    def fn(co):
+        ds = sorted((dist(co, h, t), b) for b, (h, t) in S.items())[:top]
+        return {b: 1.0 / (d ** power + 1e-7) for d, b in ds}
+    return fn
+
+
 class Pose:
     """One frame's pose, built up with rot/move/size calls and then applied to the rig."""
 

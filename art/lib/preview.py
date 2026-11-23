@@ -9,9 +9,11 @@ from mathutils import Vector
 from . import core
 
 SKY = (0.70, 0.78, 0.95)
+NIGHT = (0.08, 0.09, 0.15)
+BG = [SKY]
 
 
-def setup(size=512, samples=24):
+def setup(size=512, samples=24, dark=False):
     sc = bpy.context.scene
     sc.render.engine = 'CYCLES'
     sc.cycles.device = 'CPU'
@@ -23,7 +25,7 @@ def setup(size=512, samples=24):
     except Exception:
         pass
     sc.render.resolution_x = sc.render.resolution_y = size
-    sc.render.film_transparent = True
+    sc.render.film_transparent = not dark  # emission-only surfaces have no alpha, so glow previews render the sky directly
     sc.render.image_settings.file_format = 'PNG'
     sc.render.image_settings.color_mode = 'RGBA'
     sc.view_settings.view_transform = 'Standard'
@@ -37,7 +39,8 @@ def setup(size=512, samples=24):
     except Exception:
         pass
     bg = next(n for n in world.node_tree.nodes if n.type == 'BACKGROUND')
-    bg.inputs['Color'].default_value = (*[core.srgb_to_linear(c) for c in SKY], 1.0)
+    BG[0] = NIGHT if dark else SKY
+    bg.inputs['Color'].default_value = (*[core.srgb_to_linear(c) for c in BG[0]], 1.0)
     bg.inputs['Strength'].default_value = 0.85
 
     col = core.collection('Preview')
@@ -117,7 +120,7 @@ def render(path, size=None):
     if jpg:
         from PIL import Image
         im = Image.open(png).convert('RGBA')
-        bg = Image.new('RGBA', im.size, tuple(int(v * 255) for v in SKY) + (255,))
+        bg = Image.new('RGBA', im.size, tuple(int(v * 255) for v in BG[0]) + (255,))
         bg.alpha_composite(im)
         bg.convert('RGB').save(path, quality=88)
         os.remove(png)

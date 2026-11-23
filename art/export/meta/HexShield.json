@@ -1,0 +1,17 @@
+{
+  "name": "HexShield",
+  "kind": "gear",
+  "group": "gear",
+  "triangles": 1320,
+  "fbx": "fbx/HexShield.fbx",
+  "glb": "glb/HexShield.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {},
+  "hitSpheres": [],
+  "notes": "Single flat sheet facing -Y (forward): render both sides (Cull Off). Scale in from 0.6 as it raises; flash brighter on a block (web: hands.js shield)."
+}

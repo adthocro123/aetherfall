@@ -1,0 +1,34 @@
+{
+  "name": "Blade_Tempered",
+  "kind": "gear",
+  "group": "gear",
+  "triangles": 350,
+  "fbx": "fbx/Blade_Tempered.fbx",
+  "glb": "glb/Blade_Tempered.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {
+    "Base": {
+      "bone": null,
+      "position": [
+        0,
+        0,
+        0.14
+      ]
+    },
+    "Tip": {
+      "bone": null,
+      "position": [
+        0,
+        0,
+        1.215
+      ]
+    }
+  },
+  "hitSpheres": [],
+  "notes": "Tempered Aether Blade (damage x1.35, costs 18 shards). Longer and slimmer, with a glowing fuller. Grip centred on the origin; Base/Tip empties give the blade segment for the sweep test. The _Glow child uses AF_Glow: give it an additive shader."
+}
