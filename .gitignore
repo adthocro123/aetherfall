@@ -1,0 +1,6 @@
+# Local-only files
+.claude/
+tools/.cert/
+node_modules/
+.DS_Store
+*.log

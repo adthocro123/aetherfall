@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Aetherfall</title>
+<meta name="description" content="Aetherfall: a sky-island action RPG. Play with keyboard and mouse, or in VR.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=JetBrains+Mono:wght@400;500&family=Rajdhani:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="src/ui/style.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+</head>
+<body data-state="landing">
+<canvas id="view" aria-label="Aetherfall game view"></canvas>
+<div id="hurt" class="layer" aria-hidden="true"></div>
+
+<div id="hud">
+  <div class="pframe">
+    <div class="lv"><small>LV</small><b id="hLv">1</b></div>
+    <div class="pinfo">
+      <div class="pname"><span id="hName">Wanderer</span><em id="hShards">◆ 0</em></div>
+      <div class="pbar hp"><span>HP</span><div class="trk"><u id="hHpLag"></u><i id="hHp"></i></div><b id="hHpTxt">100 / 100</b></div>
+      <div class="pbar ae"><span>AE</span><div class="trk"><i id="hAe"></i></div><b id="hAeTxt">60 / 60</b></div>
+      <div class="xpbar" title="Experience"><i id="hXp"></i></div>
+    </div>
+  </div>
+  <div class="quest" id="hQuest"><span class="qk">Quest</span><b id="hQuestTitle"></b><span id="hQuestObj"></span></div>
+  <div class="cross" id="hCross" aria-hidden="true"></div>
+  <div class="prompt" id="hPrompt" aria-live="polite"></div>
+  <div class="boss" id="hBoss"><b id="hBossName">The Stone Warden</b><div class="trk"><u id="hBossLag"></u><i id="hBossHp"></i></div></div>
+  <div class="area" id="hArea"><b id="hAreaName"></b><span id="hAreaSub"></span></div>
+  <div class="banner" id="hBanner"></div>
+  <div class="toasts" id="hToasts" aria-live="polite"></div>
+  <p class="keys" id="hKeys"><kbd>WASD</kbd> move <kbd>Click</kbd> swing <kbd>Right-click</kbd> aether bolt <kbd>Q</kbd> shield <kbd>Space</kbd> dodge <kbd>E</kbd> interact <kbd>Esc</kbd> menu</p>
+</div>
+
+<section id="landing" class="overlay on" aria-label="Aetherfall title screen">
+  <div class="land">
+    <p class="kicker">A full-dive frontier</p>
+    <h1 class="logo">Aetherfall</h1>
+    <p class="tag">Ten thousand islands. One sky. No way down.</p>
+    <label class="field" for="nameInput"><span>Diver name</span><input id="nameInput" maxlength="14" placeholder="Wanderer" autocomplete="off" spellcheck="false"></label>
+    <div class="btns">
+      <button type="button" id="playBtn" class="pill primary">Begin journey</button>
+      <button type="button" id="vrBtn" class="pill vr" hidden>Enter VR</button>
+    </div>
+    <p class="savenote" id="saveNote"></p>
+    <p class="note" id="vrNote">To play in VR, open this page in a VR headset's browser. An Enter VR button appears here when one is detected.</p>
+    <div class="links"><a href="intro.html">Watch the dive intro</a><button type="button" id="newBtn" class="linkbtn" hidden>Start a new game</button></div>
+  </div>
+  <dl class="controls">
+    <div><dt>WASD</dt><dd>Move</dd></div><div><dt>Mouse</dt><dd>Look</dd></div><div><dt>Click</dt><dd>Swing, combo ×3</dd></div>
+    <div><dt>Right-click</dt><dd>Aether bolt</dd></div><div><dt>Q (hold)</dt><dd>Hex shield</dd></div><div><dt>Space</dt><dd>Dodge</dd></div>
+    <div><dt>Shift</dt><dd>Sprint</dd></div><div><dt>E</dt><dd>Talk, travel</dd></div>
+  </dl>
+</section>
+
+<section id="menu" class="overlay" aria-label="Paused">
+  <div class="mbox">
+    <p class="mk">Paused</p>
+    <div class="mlist">
+      <button type="button" data-m="resume">Resume</button>
+      <button type="button" data-m="logout">Log out</button>
+      <button type="button" data-m="title">Save and return to title</button>
+    </div>
+    <div class="msettings">
+      <label for="setVol">Volume <input type="range" id="setVol" min="0" max="100" value="85"></label>
+      <label for="setSens">Mouse sensitivity <input type="range" id="setSens" min="20" max="250" value="100"></label>
+      <label class="chk" for="setInvert"><input type="checkbox" id="setInvert"> Invert mouse Y</label>
+    </div>
+    <p class="mhint">Your progress saves automatically in this browser.</p>
+  </div>
+</section>
+
+<button type="button" id="resumeCover" class="cover">Click to keep playing</button>
+
+<div class="sys" id="sys" role="alertdialog" aria-labelledby="sysHead">
+  <h3 id="sysHead"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 21h20L12 3z"/><path d="M12 10v5M12 18v.5"/></svg>System notice</h3>
+  <p>Logout function not found.</p>
+  <p class="l2">Please enjoy your stay in Aetherfall.</p>
+  <button type="button" id="sysOk">Understood</button>
+</div>
+
+<section id="ending" class="overlay" aria-label="Chapter complete">
+  <div class="endbox">
+    <p class="kicker">Chapter one complete</p>
+    <h2>The First Chain is open</h2>
+    <p>Pell's charts are redrawing themselves. Beyond Warden's Isle, a second chain of islands is waking up.</p>
+    <p class="dim">To be continued in the next version of Aetherfall. You can keep exploring and upgrading your blade.</p>
+    <button type="button" id="endBtn" class="pill primary">Keep exploring</button>
+  </div>
+</section>
+
+<section id="loading" class="overlay on" aria-live="polite"><p>Gathering the sky…</p></section>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
