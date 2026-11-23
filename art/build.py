@@ -7,6 +7,7 @@ With the bpy module (pip):     python art/build.py [names or groups] [options]
   names/groups   e.g. Skitter, creatures, props (default: everything)
   --out DIR      where exports go (default: art/export); point it into a Unity project's Assets/ to re-import
   --no-preview   skip the Cycles preview renders
+  --no-glb       skip the glTF exports (use with --out when writing into a Unity project)
   --list         list the assets and exit
 
 Writes, per asset: export/fbx/<Name>.fbx (Unity), export/glb/<Name>.glb (web/preview),
@@ -36,6 +37,7 @@ def main():
     ap.add_argument('--blend', default=os.path.join(HERE, 'blend'))
     ap.add_argument('--previews', default=os.path.join(HERE, 'previews'))
     ap.add_argument('--no-preview', action='store_true')
+    ap.add_argument('--no-glb', action='store_true', help='skip the glTF exports (for writing straight into a Unity project)')
     ap.add_argument('--list', action='store_true')
     a = ap.parse_args(argv)
 
@@ -49,6 +51,12 @@ def main():
         sys.exit(f'Unknown asset or group: {", ".join(unknown)}. Try --list.')
 
     registry.OUT[0] = a.out
+    if not a.no_preview:
+        try:
+            import PIL  # noqa: F401
+        except ImportError:
+            print('[art] Pillow is not installed in this Python, so previews are skipped (pip install pillow to get them).')
+            a.no_preview = True
     summary = []
     for name in wanted:
         e = REGISTRY[name]
@@ -71,8 +79,10 @@ def main():
         fbx = os.path.join(a.out, 'fbx', f'{name}.fbx')
         glb = os.path.join(a.out, 'glb', f'{name}.glb')
         export.export_fbx(fbx, res.objects, animated)
-        export.export_glb(glb, res.objects, animated)
-        info = export.glb_info(glb)
+        info = dict(animations=[c['name'] for c in res.clips], color0='n/a')
+        if not a.no_glb:
+            export.export_glb(glb, res.objects, animated)
+            info = export.glb_info(glb)
         if e['kind'] != 'world' or name != 'FarIslands':
             export.save_blend(os.path.join(a.blend, f'{name}.blend'))
 
