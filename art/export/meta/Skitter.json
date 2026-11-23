@@ -1,0 +1,102 @@
+{
+  "name": "Skitter",
+  "kind": "creature",
+  "group": "creatures",
+  "triangles": 1166,
+  "fbx": "fbx/Skitter.fbx",
+  "glb": "glb/Skitter.glb",
+  "bones": 24,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "Generic"
+  },
+  "clips": [
+    {
+      "name": "Idle",
+      "take": "Skitter|Idle",
+      "frames": 60,
+      "fps": 30,
+      "seconds": 2.0,
+      "loop": true,
+      "note": "Idle and recover."
+    },
+    {
+      "name": "Walk",
+      "take": "Skitter|Walk",
+      "frames": 24,
+      "fps": 30,
+      "seconds": 0.8,
+      "loop": true,
+      "note": "Wander (about 1.2 m/s at 1x speed)."
+    },
+    {
+      "name": "Run",
+      "take": "Skitter|Run",
+      "frames": 14,
+      "fps": 30,
+      "seconds": 0.467,
+      "loop": true,
+      "note": "Chase (about 3.7 m/s at 1x speed)."
+    },
+    {
+      "name": "Windup",
+      "take": "Skitter|Windup",
+      "frames": 12,
+      "fps": 30,
+      "seconds": 0.4,
+      "loop": false,
+      "note": "Rears up before Lunge; the game holds this state for about 0.38 s."
+    },
+    {
+      "name": "Lunge",
+      "take": "Skitter|Lunge",
+      "frames": 8,
+      "fps": 30,
+      "seconds": 0.267,
+      "loop": false,
+      "note": "The bite: damage lands during this clip (0.2 s in the game)."
+    },
+    {
+      "name": "Hit",
+      "take": "Skitter|Hit",
+      "frames": 8,
+      "fps": 30,
+      "seconds": 0.267,
+      "loop": false,
+      "note": "Flinch; play over whatever it was doing."
+    },
+    {
+      "name": "Death",
+      "take": "Skitter|Death",
+      "frames": 24,
+      "fps": 30,
+      "seconds": 0.8,
+      "loop": false,
+      "note": "Ends curled on its side; the game then shatters it."
+    }
+  ],
+  "sockets": {
+    "Mouth": {
+      "bone": "Head",
+      "position": [
+        0,
+        0.3,
+        0.74
+      ]
+    }
+  },
+  "hitSpheres": [
+    {
+      "bone": "Body",
+      "center": [
+        0,
+        0.38,
+        -0.06
+      ],
+      "radius": 0.46,
+      "damageMult": 1.0,
+      "when": "always"
+    }
+  ],
+  "notes": "States in types.js -> clips: idle=Idle/Walk, chase=Run, windup=Windup, attack=Lunge, recover=Idle, hit flinch=Hit, death=Death. No root motion: the game moves the object."
+}

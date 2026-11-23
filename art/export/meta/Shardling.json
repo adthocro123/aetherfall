@@ -1,0 +1,84 @@
+{
+  "name": "Shardling",
+  "kind": "creature",
+  "group": "creatures",
+  "triangles": 930,
+  "fbx": "fbx/Shardling.fbx",
+  "glb": "glb/Shardling.glb",
+  "bones": 6,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "Generic"
+  },
+  "clips": [
+    {
+      "name": "Idle",
+      "take": "Shardling|Idle",
+      "frames": 90,
+      "fps": 30,
+      "seconds": 3.0,
+      "loop": true,
+      "note": "Hover and kite. Face the player by turning the whole object."
+    },
+    {
+      "name": "Charge",
+      "take": "Shardling|Charge",
+      "frames": 24,
+      "fps": 30,
+      "seconds": 0.8,
+      "loop": false,
+      "note": "Charging an orb (0.75 s). Fire the orb from the Eye socket at the end."
+    },
+    {
+      "name": "Fire",
+      "take": "Shardling|Fire",
+      "frames": 10,
+      "fps": 30,
+      "seconds": 0.333,
+      "loop": false,
+      "note": "Recoil after firing."
+    },
+    {
+      "name": "Hit",
+      "take": "Shardling|Hit",
+      "frames": 8,
+      "fps": 30,
+      "seconds": 0.267,
+      "loop": false,
+      "note": ""
+    },
+    {
+      "name": "Death",
+      "take": "Shardling|Death",
+      "frames": 36,
+      "fps": 30,
+      "seconds": 1.2,
+      "loop": false,
+      "note": "Rings drop and the core winks out; the game shatters it."
+    }
+  ],
+  "sockets": {
+    "Eye": {
+      "bone": "Eye",
+      "position": [
+        0,
+        0.02,
+        0.45
+      ]
+    }
+  },
+  "hitSpheres": [
+    {
+      "bone": "Core",
+      "center": [
+        0,
+        0,
+        0
+      ],
+      "radius": 0.55,
+      "damageMult": 1.0,
+      "when": "always"
+    }
+  ],
+  "notes": "Pivot is the crystal centre: place it at ground + 2.4 m. States in types.js -> clips: idle=Idle, kite=Idle, charge=Charge (then spawn the orb at the Eye socket), Fire after shooting."
+}
