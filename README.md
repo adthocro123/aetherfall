@@ -131,3 +131,8 @@ Pushing to `main` updates the online version at the link above within a minute o
 - [three.js](https://threejs.org) r170 (MIT license), loaded from jsDelivr
 - Fonts: Cinzel, Rajdhani and JetBrains Mono from Google Fonts (SIL Open Font License)
 - Web Audio for every sound and note of music
+
+## License
+
+Aetherfall is released under the [MIT License](LICENSE). You're free to play it, change it, and reuse
+the code in your own projects, as long as you keep the copyright notice.
