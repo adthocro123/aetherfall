@@ -1,0 +1,29 @@
+{
+  "name": "TrainingDummy",
+  "kind": "prop",
+  "group": "structures",
+  "triangles": 564,
+  "fbx": "fbx/TrainingDummy.fbx",
+  "glb": "glb/TrainingDummy.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {
+    "Hit": {
+      "bone": null,
+      "position": [
+        0,
+        1.0,
+        0
+      ]
+    }
+  },
+  "hitSpheres": [],
+  "notes": "Hit sphere radius 0.45 at the Hit socket. On a hit, kick the Swing child (pivot at the top) and let a spring settle it (web: makeDummy: stiffness 38, damping 4). Collider radius 0.35.",
+  "collider": {
+    "radius": 0.35
+  }
+}

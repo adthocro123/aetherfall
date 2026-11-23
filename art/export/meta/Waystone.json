@@ -1,0 +1,29 @@
+{
+  "name": "Waystone",
+  "kind": "prop",
+  "group": "structures",
+  "triangles": 338,
+  "fbx": "fbx/Waystone.fbx",
+  "glb": "glb/Waystone.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {
+    "Glow": {
+      "bone": null,
+      "position": [
+        0,
+        3.15,
+        0
+      ]
+    }
+  },
+  "hitSpheres": [],
+  "notes": "Respawn point. Bob the Crystal child (+-0.12 m at 1.6 rad/s) and spin it; glow sprite at the Glow socket. Interact radius 2.2, collider radius 0.75.",
+  "collider": {
+    "radius": 0.75
+  }
+}

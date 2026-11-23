@@ -1,0 +1,21 @@
+{
+  "name": "Tree_Pine_B",
+  "kind": "prop",
+  "group": "nature",
+  "triangles": 240,
+  "fbx": "fbx/Tree_Pine_B.fbx",
+  "glb": "glb/Tree_Pine_B.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {},
+  "hitSpheres": [],
+  "notes": "Pine tree. Collider: a capsule of radius 0.4 x scale at the trunk. ",
+  "collider": {
+    "radius": 0.4,
+    "height": 2.4
+  }
+}

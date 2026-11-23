@@ -1,0 +1,29 @@
+{
+  "name": "Spire",
+  "kind": "prop",
+  "group": "structures",
+  "triangles": 2754,
+  "fbx": "fbx/Spire.fbx",
+  "glb": "glb/Spire.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {
+    "Beam": {
+      "bone": null,
+      "position": [
+        0,
+        43.2,
+        0
+      ]
+    }
+  },
+  "hitSpheres": [],
+  "notes": "Skyreach landmark (44 m). Spin Ring.1-3 about their local up at 0.25/0.37/0.49 rad/s, alternating direction; spin and pulse the Tip; add the light beam and glow at the Beam socket. Collider radius 3.6.",
+  "collider": {
+    "radius": 3.6
+  }
+}

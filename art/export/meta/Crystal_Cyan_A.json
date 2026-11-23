@@ -1,0 +1,20 @@
+{
+  "name": "Crystal_Cyan_A",
+  "kind": "prop",
+  "group": "nature",
+  "triangles": 196,
+  "fbx": "fbx/Crystal_Cyan_A.fbx",
+  "glb": "glb/Crystal_Cyan_A.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {},
+  "hitSpheres": [],
+  "notes": "Cyan crystal cluster; add a soft glow sprite or light 1 m up.",
+  "collider": {
+    "radius": 0.7
+  }
+}

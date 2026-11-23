@@ -1,0 +1,17 @@
+{
+  "name": "ArenaFloor",
+  "kind": "prop",
+  "group": "structures",
+  "triangles": 1592,
+  "fbx": "fbx/ArenaFloor.fbx",
+  "glb": "glb/ArenaFloor.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {},
+  "hitSpheres": [],
+  "notes": "The Warden's arena (radius 14.6). Lay it on the island centre, 3 cm proud of the ground. The rune ring marks where the Warden wakes (12.5 m from the centre in the web)."
+}

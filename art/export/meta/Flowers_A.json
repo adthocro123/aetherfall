@@ -1,0 +1,17 @@
+{
+  "name": "Flowers_A",
+  "kind": "prop",
+  "group": "nature",
+  "triangles": 340,
+  "fbx": "fbx/Flowers_A.fbx",
+  "glb": "glb/Flowers_A.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {},
+  "hitSpheres": [],
+  "notes": "Scatter with the grass (about one per nine tufts on meadow islands)."
+}

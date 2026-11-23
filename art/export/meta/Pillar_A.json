@@ -1,0 +1,20 @@
+{
+  "name": "Pillar_A",
+  "kind": "prop",
+  "group": "structures",
+  "triangles": 156,
+  "fbx": "fbx/Pillar_A.fbx",
+  "glb": "glb/Pillar_A.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {},
+  "hitSpheres": [],
+  "notes": "Arena ring pillar. Collider radius 1.0.",
+  "collider": {
+    "radius": 1.0
+  }
+}

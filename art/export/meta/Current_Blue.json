@@ -1,0 +1,26 @@
+{
+  "name": "Current_Blue",
+  "kind": "prop",
+  "group": "structures",
+  "triangles": 632,
+  "fbx": "fbx/Current_Blue.fbx",
+  "glb": "glb/Current_Blue.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {
+    "Column": {
+      "bone": null,
+      "position": [
+        0,
+        0.1,
+        0
+      ]
+    }
+  },
+  "hitSpheres": [],
+  "notes": "Travel pad. The swirling disc, 8 m light column and rising motes are VFX at the Column socket; dim them to 25% while the current is locked. Travel triggers within 1.25 m (auto after 0.8 s) or on E within 1.7 m."
+}

@@ -178,8 +178,9 @@ class Builder:
         return self.lathe([(r * 0.7, 0), (r, h * waist), (r * 0.92, h * top), (0, h)], n=n, **kw)
 
     def ico(self, r, sub=0, at=(0, 0, 0), rot=(0, 0, 0), scale=1.0, displace=None, **kw):
-        """Icosphere; displace(co) -> factor lets rocks get lumpy."""
-        res = bmesh.ops.create_icosphere(self.bm, subdivisions=sub, radius=r, matrix=Matrix())
+        """Icosphere with three.js-style detail: sub=0 is the 20-face icosahedron, sub=1 has 80 faces.
+        displace(co) -> factor lets rocks and canopies get lumpy."""
+        res = bmesh.ops.create_icosphere(self.bm, subdivisions=sub + 1, radius=r, matrix=Matrix())
         verts = res['verts']
         if displace:
             for v in verts:

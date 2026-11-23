@@ -1,0 +1,17 @@
+{
+  "name": "Rock_D",
+  "kind": "prop",
+  "group": "nature",
+  "triangles": 240,
+  "fbx": "fbx/Rock_D.fbx",
+  "glb": "glb/Rock_D.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {},
+  "hitSpheres": [],
+  "notes": "Pivot at the base, slightly buried. Collider: a sphere or mesh collider; the web only blocked rocks scaled above 0.7."
+}

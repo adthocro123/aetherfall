@@ -1,0 +1,21 @@
+{
+  "name": "Tree_Round_A",
+  "kind": "prop",
+  "group": "nature",
+  "triangles": 400,
+  "fbx": "fbx/Tree_Round_A.fbx",
+  "glb": "glb/Tree_Round_A.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {},
+  "hitSpheres": [],
+  "notes": "Round tree. Collider: a capsule of radius 0.4 x scale at the trunk. ",
+  "collider": {
+    "radius": 0.4,
+    "height": 2.4
+  }
+}
