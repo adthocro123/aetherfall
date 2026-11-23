@@ -117,7 +117,26 @@ def main():
         print(f'[art] {name}: {tris} tris, {meta["bones"]} bones, clips={[c["name"] for c in res.clips]}, '
               f'glb anims={len(info["animations"])}, COLOR_0={info["color0"]} ({dt:.1f}s)', flush=True)
 
+    write_viewer_index(a.out)
     print('\n[art] built', len(summary), 'assets:', ', '.join(s[0] for s in summary))
+
+
+def write_viewer_index(out):
+    """art/viewer/viewer.json: the asset list the browser viewer shows, rebuilt from every meta file."""
+    import glob
+    import json
+    order = ['creatures', 'characters', 'gear', 'nature', 'structures', 'islands']
+    assets = []
+    for p in glob.glob(os.path.join(out, 'meta', '*.json')):
+        m = json.load(open(p))
+        if m.get('kind') == 'data' or m.get('group') not in order:
+            continue
+        assets.append(dict(name=m['name'], group=m['group'], kind=m['kind'], tris=m['triangles'], bones=m.get('bones', 0),
+                           clips=[dict(name=c['name'], seconds=c['seconds'], loop=c['loop'], note=c.get('note', '')) for c in m.get('clips', [])],
+                           notes=m.get('notes', ''), sockets=m.get('sockets', {}), hits=m.get('hitSpheres', [])))
+    assets.sort(key=lambda a: (order.index(a['group']), a['name']))
+    with open(os.path.join(HERE, 'viewer', 'viewer.json'), 'w') as f:
+        json.dump(dict(groups=order, assets=assets), f, separators=(',', ':'))
 
 
 if __name__ == '__main__':

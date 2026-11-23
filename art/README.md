@@ -5,6 +5,9 @@ game's low-poly, flat-shaded look and its palette, and add real modelling, rigs 
 
 ![Creatures, Pell, gear and props](previews/Overview.jpg)
 
+To look at everything in 3D, with every animation clip, the hit spheres and the islands assembled from the layout, run
+`npm start` in the repo and open http://localhost:8080/art/viewer/.
+
 ## What's here
 
 | Folder | Contents |
@@ -15,6 +18,7 @@ game's low-poly, flat-shaded look and its palette, and add real modelling, rigs 
 | `export/layout.json` | Where every island, prop, tree, rock, tuft, spawn and travel point goes, in Unity space |
 | `blend/` | Editable Blender files |
 | `previews/` | A render of each asset, and for animated ones a strip with five frames of every clip |
+| `viewer/` | A browser viewer for all of the above (three.js); `build.py` keeps its index up to date |
 | `assets/` | The scripts that build everything, one module per group |
 | `lib/` | Shared helpers: mesh building, colours, rigs and clips, export, previews |
 

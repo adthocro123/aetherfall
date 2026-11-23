@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!-- Run `npm start` in the repo and open http://localhost:8080/art/viewer/ . Regenerated index: art/build.py writes viewer.json. -->
+<title>Aetherfall Asset Viewer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=JetBrains+Mono:wght@400;500&family=Rajdhani:wght@500;600;700&display=swap">
+<style>
+body { margin: 0; }
+/* Layout: the game's glass HUD around a sky-lit stage. List | stage | inspector on desktop; stage, inspector, list on phones.
+   Deliberately single-theme (the game's night-glass look), every colour set explicitly. */
+:root {
+  --void: #050912; --panel: #0b1424; --panel-2: #0e1a30; --line: rgba(139, 232, 255, .2); --line-2: rgba(139, 232, 255, .38);
+  --ink: #eaf2ff; --ink-2: rgba(222, 234, 255, .78); --ink-3: rgba(206, 224, 255, .52);
+  --aether: #8be8ff; --aether-b: rgba(139, 232, 255, .14); --sun: #ffd9a2; --sun-b: rgba(255, 206, 140, .16);
+  --sky-top: #1a3d93; --sky-mid: #5a92ec; --sky-low: #b8cff7; --sky-warm: #ffcf9e;
+  --f-display: Cinzel, Georgia, serif; --f-ui: Rajdhani, "Arial Narrow", system-ui, sans-serif; --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+[hidden] { display: none !important; }
+body { background: var(--void); color: var(--ink); font: 500 15px/1.45 var(--f-ui); }
+.app { height: 100%; display: grid; grid-template-columns: 250px minmax(0, 1fr) 300px; grid-template-rows: auto minmax(0, 1fr); }
+.bar { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; padding-block: 10px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background: var(--panel); border-bottom: 1px solid var(--line); }
+.brand { display: flex; align-items: baseline; gap: 10px; }
+.brand b { font: 700 19px/1 var(--f-display); letter-spacing: .14em; }
+.brand span { font: 500 12px var(--f-mono); color: var(--ink-3); letter-spacing: .08em; text-transform: uppercase; }
+.seg { display: inline-flex; border: 1px solid var(--line-2); border-radius: 999px; overflow: hidden; }
+.seg button { font: 600 13px var(--f-ui); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); background: none; border: 0; padding: 6px 14px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--aether-b); color: var(--aether); }
+.bar .spacer { flex: 1; }
+.bar .count { font: 400 12px var(--f-mono); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+select, input[type="search"] { font: 500 14px var(--f-ui); color: var(--ink); background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; }
+button:focus-visible, select:focus-visible, input:focus-visible, .item:focus-visible { outline: 2px solid var(--aether); outline-offset: 2px; }
+
+.list { background: var(--panel); border-right: 1px solid var(--line); overflow: auto; padding-block: 12px 24px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: 10px; display: flex; flex-direction: column; gap: 14px; }
+.list input { width: 100%; }
+.group h3 { margin: 0 6px 6px; font: 600 12px var(--f-ui); letter-spacing: .18em; text-transform: uppercase; color: var(--sun); display: flex; justify-content: space-between; }
+.group h3 i { font: 400 11px var(--f-mono); font-style: normal; color: var(--ink-3); letter-spacing: 0; }
+.item { width: 100%; display: flex; justify-content: space-between; gap: 8px; text-align: left; background: none; border: 0; border-radius: 7px;
+  color: var(--ink-2); font: 500 14px var(--f-ui); padding: 5px 8px; cursor: pointer; }
+.item:hover { background: var(--aether-b); color: var(--ink); }
+.item[aria-current="true"] { background: var(--aether-b); color: var(--aether); box-shadow: inset 2px 0 0 var(--aether); }
+.item small { font: 400 11px var(--f-mono); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+.stage { position: relative; min-width: 0; min-height: 0;
+  background: linear-gradient(to bottom, var(--sky-top) 0%, var(--sky-mid) 42%, var(--sky-low) 78%, var(--sky-warm) 100%); }
+.stage canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+.hud { position: absolute; left: calc(14px + env(safe-area-inset-left, 0px)); bottom: 12px; right: calc(14px + env(safe-area-inset-right, 0px)); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; pointer-events: none;
+  font: 500 12px var(--f-mono); color: rgba(255, 255, 255, .82); text-shadow: 0 1px 3px rgba(0, 0, 0, .55); }
+.loading { position: absolute; inset: 0; display: grid; place-items: center; font: 600 14px var(--f-ui); letter-spacing: .2em; text-transform: uppercase; color: #fff;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, .5); pointer-events: none; }
+
+.inspector { background: var(--panel); border-left: 1px solid var(--line); overflow: auto; padding-block: 16px 24px; padding-left: 16px; padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 16px; }
+.inspector h2 { margin: 0; font: 700 22px/1.15 var(--f-display); letter-spacing: .04em; text-wrap: balance; overflow-wrap: anywhere; }
+.chip { display: inline-block; font: 600 11px var(--f-ui); letter-spacing: .16em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--aether); }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.stats div { background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+.stats dt { font: 600 11px var(--f-ui); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+.stats dd { margin: 2px 0 0; font: 500 18px var(--f-mono); font-variant-numeric: tabular-nums; }
+.label { font: 600 12px var(--f-ui); letter-spacing: .16em; text-transform: uppercase; color: var(--sun); margin-bottom: 6px; }
+.clips { display: flex; flex-wrap: wrap; gap: 6px; }
+.clips button { font: 600 13px var(--f-ui); color: var(--ink-2); background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; cursor: pointer; }
+.clips button:hover { border-color: var(--line-2); color: var(--ink); }
+.clips button[aria-pressed="true"] { color: #071019; background: var(--aether); border-color: var(--aether); }
+.clipnote { margin: 8px 0 0; color: var(--ink-2); font-size: 14px; }
+.clipnote b { font: 500 12px var(--f-mono); color: var(--ink-3); margin-right: 6px; }
+.row { display: flex; align-items: center; gap: 10px; }
+.row input[type="range"] { flex: 1; accent-color: var(--aether); }
+.toggles { display: flex; flex-direction: column; gap: 6px; }
+.toggles label { display: flex; align-items: center; gap: 8px; color: var(--ink-2); cursor: pointer; }
+.toggles input { accent-color: var(--aether); width: 16px; height: 16px; }
+.notes { margin: 0; color: var(--ink-2); font-size: 14px; max-width: 65ch; }
+.kv { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 10px; font: 400 12px var(--f-mono); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.kv span:nth-child(odd) { color: var(--ink-3); }
+.legend { font: 400 12px var(--f-mono); color: var(--ink-3); }
+.legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+
+@media (max-width: 900px) {
+  .app { height: auto; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; }
+  .stage { height: 58vh; min-height: 300px; }
+  .list { border-right: 0; border-top: 1px solid var(--line); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .inspector { border-left: 0; padding-left: max(16px, env(safe-area-inset-left, 0px)); }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+
+</head>
+<body>
+<div class="app">
+  <header class="bar">
+    <div class="brand"><b>AETHERFALL</b><span>Art kit for the Unity port</span></div>
+    <div class="seg" role="group" aria-label="View">
+      <button type="button" id="modeModels" aria-pressed="true">Models</button>
+      <button type="button" id="modeWorld" aria-pressed="false">World</button>
+    </div>
+    <select id="islandPick" aria-label="Island" hidden>
+      <option value="skyreach">Skyreach</option>
+      <option value="verdant">Verdant Shelf</option>
+      <option value="warden">Warden's Isle</option>
+      <option value="all">The First Chain (all three)</option>
+    </select>
+    <span class="spacer"></span>
+    <span class="count" id="count"></span>
+  </header>
+
+  <aside class="list" id="list" aria-label="Assets">
+    <input type="search" id="search" placeholder="Filter assets" aria-label="Filter assets" autocomplete="off">
+  </aside>
+
+  <main class="stage" id="stage">
+    <canvas id="view" aria-label="3D view of the selected asset"></canvas>
+    <div class="loading" id="loading">Loading</div>
+    <div class="hud"><span id="hudLeft">Drag to orbit &middot; scroll or pinch to zoom</span><span id="hudRight"></span></div>
+  </main>
+
+  <section class="inspector" id="inspector" aria-live="polite"></section>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { clone as cloneSkinned } from 'three/addons/utils/SkeletonUtils.js';
+
+const $ = id => document.getElementById(id);
+const DEG = Math.PI / 180;
+const GROUP_TITLES = { creatures: 'Creatures', characters: 'Characters', gear: 'Gear', nature: 'Nature', structures: 'Structures', islands: 'Islands' };
+const ISLAND_TITLES = { skyreach: 'Skyreach', verdant: 'Verdant Shelf', warden: "Warden's Isle" };
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- renderer, scene, lights ---------- */
+const canvas = $('view'), stage = $('stage');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.NeutralToneMapping; renderer.toneMappingExposure = 1.05;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(40, 1, 0.02, 5000);
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true; controls.autoRotateSpeed = 1.2;
+scene.add(new THREE.HemisphereLight(0xd2e2ff, 0x7a6688, 1.35));
+const sun = new THREE.DirectionalLight(0xffe0be, 2.5);
+sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.02;
+scene.add(sun, sun.target);
+const shadowGround = new THREE.Mesh(new THREE.CircleGeometry(1, 64).rotateX(-Math.PI / 2), new THREE.ShadowMaterial({ opacity: 0.22 }));
+shadowGround.receiveShadow = true; scene.add(shadowGround);
+const root = new THREE.Group(); scene.add(root);
+const SUN_DIR = new THREE.Vector3(-0.52, 0.62, 0.59).normalize();
+
+/* ---------- materials: vertex colour, alpha = emission (the art kit's convention) ---------- */
+const vcMat = new THREE.MeshLambertMaterial({ vertexColors: true, flatShading: true });
+vcMat.onBeforeCompile = s => {
+  s.fragmentShader = s.fragmentShader.replace('#include <emissivemap_fragment>',
+    '#include <emissivemap_fragment>\n#ifdef USE_COLOR_ALPHA\n totalEmissiveRadiance += diffuseColor.rgb * vColor.a * 1.3;\n diffuseColor.a = 1.0;\n#endif');
+};
+const glowMat = new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide, toneMapped: false });
+const hitMat = new THREE.MeshBasicMaterial({ color: 0xff5468, wireframe: true, transparent: true, opacity: .75, depthTest: false });
+const sockMat = new THREE.MeshBasicMaterial({ color: 0xffd98a, depthTest: false });
+
+/* ---------- loading ---------- */
+const loader = new GLTFLoader();
+const cache = new Map();
+function load(name) {
+  if (!cache.has(name)) cache.set(name, loader.loadAsync(`../export/glb/${name}.glb`).then(g => {
+    g.scene.traverse(o => {
+      if (!o.isMesh) return;
+      o.material = o.material?.name === 'AF_Glow' ? glowMat : vcMat;
+      o.castShadow = o.material === vcMat; o.receiveShadow = true;
+      if (o.name.startsWith('EdgeWall')) o.visible = false;
+    });
+    return g;
+  }));
+  return cache.get(name);
+}
+const sanitize = n => n.replace(/\s/g, '_').replace(/[\[\].:\/]/g, '');
+const unityToThree = p => new THREE.Vector3(-p[0], p[1], p[2]);
+
+/* ---------- data ---------- */
+let DATA, LAYOUT;
+const mixers = [];
+let current = null;          // { name, asset, object, mixer, actions, clip }
+let mode = 'models';
+let showHits = false;
+let worldKey = 'skyreach';
+
+function clearStage() {
+  for (const o of [...root.children]) root.remove(o);
+  mixers.length = 0;
+  current = null;
+}
+
+function frameObject(obj, { dist = 1.0, elev = 18, yaw = -32 } = {}) {
+  const box = new THREE.Box3().setFromObject(obj, true);
+  const sphere = box.getBoundingSphere(new THREE.Sphere());
+  const r = Math.max(sphere.radius, 0.05);
+  const d = r / Math.sin(camera.fov * DEG / 2) * 1.12 * dist;
+  const dir = new THREE.Vector3(Math.sin(yaw * DEG) * Math.cos(elev * DEG), Math.sin(elev * DEG), Math.cos(yaw * DEG) * Math.cos(elev * DEG));
+  controls.target.copy(sphere.center);
+  camera.position.copy(sphere.center).addScaledVector(dir, d);
+  camera.near = Math.max(0.01, d / 200); camera.far = d * 40 + 400; camera.updateProjectionMatrix();
+  controls.minDistance = r * 0.3; controls.maxDistance = d * 6;
+  controls.update();
+  return { box, r };
+}
+
+function lightFor(box, r) {
+  const c = box.getCenter(new THREE.Vector3());
+  sun.position.copy(c).addScaledVector(SUN_DIR, r * 4 + 2); sun.target.position.copy(c);
+  const cam = sun.shadow.camera; cam.left = cam.bottom = -r * 1.5; cam.right = cam.top = r * 1.5; cam.near = 0.1; cam.far = r * 10 + 10; cam.updateProjectionMatrix();
+  shadowGround.position.set(c.x, box.min.y + 0.001, c.z); shadowGround.scale.setScalar(r * 3);
+}
+
+/* ---------- model mode ---------- */
+async function showModel(name) {
+  const asset = DATA.assets.find(a => a.name === name);
+  if (!asset) return;
+  setBusy(true);
+  const g = await load(name);
+  clearStage();
+  scene.fog = null; renderer.shadowMap.enabled = true; shadowGround.visible = asset.group !== 'islands';
+  const obj = asset.bones ? cloneSkinned(g.scene) : g.scene.clone(true);
+  if (name === 'Shardling') obj.position.y = 2.4;
+  root.add(obj);
+  obj.updateMatrixWorld(true);
+  const markers = buildMarkers(asset, obj);
+  const yaw = asset.group === 'gear' ? -58 : -32;
+  const { box, r } = frameObject(obj, { yaw, elev: asset.group === 'islands' ? 26 : 16 });
+  if (name === 'Shardling') { box.min.y = 0; }
+  lightFor(box, r);
+  let mixer = null, actions = {};
+  if (g.animations.length) {
+    mixer = new THREE.AnimationMixer(obj); mixers.push(mixer);
+    for (const clip of g.animations) actions[clip.name] = mixer.clipAction(clip);
+  }
+  current = { name, asset, object: obj, mixer, actions, clip: null, markers };
+  renderInspector();
+  const first = asset.clips.find(c => c.name === (asset.group === 'creatures' && name !== 'WardenRocks' ? (actions.Walk ? 'Walk' : 'Idle') : 'Idle')) || asset.clips[0];
+  if (first) playClip(first.name);
+  markList(name);
+  setHash(name);
+  setBusy(false);
+  $('hudRight').textContent = `${asset.tris.toLocaleString()} triangles`;
+}
+
+function buildMarkers(asset, obj) {
+  const group = { userData: {} };
+  for (const h of asset.hits) {
+    const s = new THREE.Mesh(new THREE.SphereGeometry(h.radius, 14, 10), hitMat);
+    s.renderOrder = 10;
+    attach(obj, h.bone, unityToThree(h.center), s);
+  }
+  for (const [n, s] of Object.entries(asset.sockets)) {
+    const m = new THREE.Mesh(new THREE.OctahedronGeometry(Math.max(0.025, 0.04)), sockMat);
+    m.renderOrder = 11; m.name = 'socket:' + n;
+    attach(obj, s.bone, unityToThree(s.position), m);
+  }
+  function attach(model, boneName, p, mesh) {
+    const bone = boneName ? model.getObjectByName(sanitize(boneName)) : null;
+    const parent = bone || model;
+    const world = model.localToWorld(p.clone());
+    mesh.position.copy(parent.worldToLocal(world));
+    parent.add(mesh); group.userData.items = (group.userData.items || []).concat(mesh);
+  }
+  const items = group.userData.items || [];
+  items.forEach(m => { m.visible = showHits; });
+  return items;
+}
+
+function playClip(clipName) {
+  if (!current?.mixer) return;
+  const a = current.actions[clipName]; if (!a) return;
+  const meta = current.asset.clips.find(c => c.name === clipName);
+  for (const other of Object.values(current.actions)) if (other !== a) other.fadeOut(0.15);
+  a.reset(); a.setLoop(meta?.loop ? THREE.LoopRepeat : THREE.LoopOnce, Infinity); a.clampWhenFinished = true;
+  a.fadeIn(0.15).play();
+  current.clip = clipName;
+  document.querySelectorAll('.clips button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.clip === clipName)));
+  const note = $('clipNote');
+  if (note && meta) note.innerHTML = `<b>${meta.seconds.toFixed(2)} s${meta.loop ? ' \u00b7 loop' : ''}</b>${escapeHtml(meta.note || 'No gameplay note.')}`;
+}
+
+function renderInspector() {
+  const el = $('inspector');
+  if (mode === 'world') return renderWorldInspector();
+  const a = current.asset;
+  el.innerHTML = `
+    <div><span class="chip">${GROUP_TITLES[a.group]} \u00b7 ${a.kind}</span></div>
+    <h2>${escapeHtml(a.name.replace(/_/g, ' '))}</h2>
+    <dl class="stats">
+      <div><dt>Triangles</dt><dd>${a.tris.toLocaleString()}</dd></div>
+      <div><dt>Bones</dt><dd>${a.bones}</dd></div>
+      <div><dt>Clips</dt><dd>${a.clips.length}</dd></div>
+    </dl>
+    ${a.clips.length ? `<div><div class="label">Animation</div>
+      <div class="clips">${a.clips.map(c => `<button type="button" data-clip="${c.name}" aria-pressed="false">${c.name}</button>`).join('')}</div>
+      <p class="clipnote" id="clipNote"></p></div>` : ''}
+    <div class="row"><label for="speed" class="label" style="margin:0">Speed</label><input type="range" id="speed" min="0.1" max="2" step="0.05" value="${$('speed')?.value || 1}"><span class="legend" id="speedOut"></span></div>
+    <div class="toggles">
+      <label><input type="checkbox" id="turntable" ${controls.autoRotate ? 'checked' : ''}> Turntable</label>
+      ${(a.hits.length || Object.keys(a.sockets).length) ? `<label><input type="checkbox" id="showHits" ${showHits ? 'checked' : ''}> Hit spheres and sockets</label>
+      <span class="legend"><i style="background:#ff5468"></i>hit sphere${a.hits.length ? 's' : ''} (${a.hits.length}) <i style="background:#ffd98a;margin-left:10px"></i>sockets (${Object.keys(a.sockets).length})</span>` : ''}
+    </div>
+    ${a.notes ? `<div><div class="label">Notes for Unity</div><p class="notes">${escapeHtml(a.notes)}</p></div>` : ''}
+    ${Object.keys(a.sockets).length ? `<div><div class="label">Sockets</div><div class="kv">${Object.entries(a.sockets).map(([n, s]) => `<span>${n}</span><span>${s.bone || 'root'} \u00b7 ${s.position.map(v => v.toFixed(2)).join(', ')}</span>`).join('')}</div></div>` : ''}
+  `;
+  el.querySelectorAll('.clips button').forEach(b => b.addEventListener('click', () => playClip(b.dataset.clip)));
+  wireCommon();
+  $('showHits')?.addEventListener('change', e => { showHits = e.target.checked; current.markers.forEach(m => { m.visible = showHits; }); });
+}
+
+function wireCommon() {
+  const sp = $('speed'), out = $('speedOut');
+  const show = () => { out.textContent = `${(+sp.value).toFixed(2)}x`; for (const m of mixers) m.timeScale = +sp.value; };
+  sp.addEventListener('input', show); show();
+  $('turntable').addEventListener('change', e => { controls.autoRotate = e.target.checked; });
+}
+
+/* ---------- world mode: islands assembled from layout.json ---------- */
+const CREATURE = { skitter: 'Skitter', thornback: 'Thornback', shardling: 'Shardling' };
+
+async function showWorld(key) {
+  setBusy(true);
+  worldKey = key;
+  if (!LAYOUT) LAYOUT = await fetch('../export/layout.json').then(r => r.json());
+  const keys = key === 'all' ? ['skyreach', 'verdant', 'warden'] : [key];
+  const needed = new Set();
+  for (const k of keys) {
+    const I = LAYOUT.islands[k];
+    needed.add(I.model);
+    I.props.forEach(p => needed.add(p.asset));
+    Object.keys(I.scatter).forEach(n => needed.add(n));
+    (I.spawns || []).forEach(s => needed.add(CREATURE[s.type]));
+  }
+  needed.add('Pell'); needed.add('StoneWarden');
+  if (key === 'all') needed.add('FarIslands');
+  const loaded = Object.fromEntries(await Promise.all([...needed].map(async n => [n, await load(n)])));
+  clearStage();
+  scene.fog = new THREE.Fog(0xb8cff7, key === 'all' ? 400 : 170, key === 'all' ? 2600 : 1200);
+  renderer.shadowMap.enabled = false; shadowGround.visible = false;
+  const rnd = mulberry(7);
+  const stats = { props: 0, instances: 0, creatures: 0 };
+  for (const k of keys) {
+    const I = LAYOUT.islands[k];
+    const base = unityToThree(I.position);
+    const isl = loaded[I.model].scene.clone(true); isl.position.copy(base); root.add(isl);
+    for (const p of I.props) {
+      const o = loaded[p.asset].scene.clone(true);
+      o.position.copy(base).add(unityToThree(p.position)); o.rotation.y = -p.yaw * DEG;
+      if (Array.isArray(p.scale)) o.scale.set(...p.scale); else o.scale.setScalar(p.scale);
+      root.add(o); stats.props++;
+    }
+    for (const [name, rows] of Object.entries(I.scatter)) {
+      const src = loaded[name].scene; src.updateMatrixWorld(true);
+      src.traverse(m => {
+        if (!m.isMesh) return;
+        const im = new THREE.InstancedMesh(m.geometry, m.material, rows.length);
+        const M = new THREE.Matrix4(), q = new THREE.Quaternion(), col = new THREE.Color();
+        rows.forEach((r, i) => {
+          q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), -r[3] * DEG);
+          M.compose(new THREE.Vector3(base.x - r[0], base.y + r[1], base.z + r[2]), q, new THREE.Vector3(r[4], r[4], r[4])).multiply(m.matrixWorld);
+          im.setMatrixAt(i, M);
+          if (r.length > 5) im.setColorAt(i, col.setRGB(r[5], r[6], r[7]));
+        });
+        im.instanceMatrix.needsUpdate = true; if (im.instanceColor) im.instanceColor.needsUpdate = true;
+        im.computeBoundingSphere(); root.add(im);
+      });
+      stats.instances += rows.length;
+    }
+    for (const s of I.spawns || []) {
+      const g = loaded[CREATURE[s.type]];
+      for (let i = 0; i < s.count; i++) {
+        const o = cloneSkinned(g.scene), a = rnd() * Math.PI * 2, d = s.count > 1 ? 1.5 + rnd() * 2.5 : 0;
+        o.position.copy(base).add(unityToThree(s.position)).add(new THREE.Vector3(Math.cos(a) * d, s.type === 'shardling' ? 2.4 : 0, Math.sin(a) * d));
+        o.rotation.y = rnd() * Math.PI * 2; root.add(o); animate(o, g, 'Idle', rnd()); stats.creatures++;
+      }
+    }
+    if (I.points.pell) {
+      const o = cloneSkinned(loaded.Pell.scene); o.position.copy(base).add(unityToThree(I.points.pell.position)); o.rotation.y = 0.9;
+      root.add(o); animate(o, loaded.Pell, 'Idle', 0);
+    }
+    if (I.points.bossSpawn) {
+      const o = cloneSkinned(loaded.StoneWarden.scene); o.position.copy(base).add(unityToThree(I.points.bossSpawn.position));
+      root.add(o); animate(o, loaded.StoneWarden, 'Dormant', 0); stats.creatures++;
+    }
+  }
+  if (key === 'all') root.add(loaded.FarIslands.scene.clone(true));
+  const focus = key === 'all' ? null : unityToThree(LAYOUT.islands[key].position);
+  if (focus) {
+    const r = LAYOUT.islands[key].radius;
+    controls.target.copy(focus);
+    camera.position.copy(focus).add(new THREE.Vector3(-r * 1.15, r * 1.05, r * 1.55));
+    camera.near = 0.3; camera.far = 4000; camera.updateProjectionMatrix();
+    controls.minDistance = 3; controls.maxDistance = r * 8; controls.update();
+  } else {
+    controls.target.set(30, -5, -70); camera.position.set(-150, 120, 170);
+    camera.near = 0.5; camera.far = 6000; camera.updateProjectionMatrix(); controls.minDistance = 10; controls.maxDistance = 1500; controls.update();
+  }
+  current = { world: key, stats };
+  renderInspector();
+  markList(null); setHash('world-' + key);
+  $('hudRight').textContent = `${stats.instances.toLocaleString()} scattered instances \u00b7 ${stats.props} props \u00b7 ${stats.creatures} creatures`;
+  setBusy(false);
+}
+
+function animate(obj, gltf, clipName, offset) {
+  const clip = gltf.animations.find(c => c.name === clipName); if (!clip) return;
+  const m = new THREE.AnimationMixer(obj); const a = m.clipAction(clip); a.play(); a.time = offset * clip.duration; mixers.push(m);
+}
+
+function renderWorldInspector() {
+  const keys = worldKey === 'all' ? ['skyreach', 'verdant', 'warden'] : [worldKey];
+  const el = $('inspector');
+  el.innerHTML = `
+    <div><span class="chip">World \u00b7 from layout.json</span></div>
+    <h2>${worldKey === 'all' ? 'The First Chain' : ISLAND_TITLES[worldKey]}</h2>
+    <p class="notes">Assembled in the browser from the exported island meshes, props and <code>layout.json</code>, the same data the Unity Build World command reads. Positions match the web game.</p>
+    ${keys.map(k => { const I = LAYOUT.islands[k]; const sc = Object.entries(I.scatter);
+      return `<div><div class="label">${ISLAND_TITLES[k]}</div><div class="kv">
+        <span>subtitle</span><span>${escapeHtml(I.subtitle)}</span>
+        <span>radius</span><span>${I.radius} m</span>
+        <span>props</span><span>${I.props.length}</span>
+        ${sc.map(([n, r]) => `<span>${n}</span><span>${r.length}</span>`).join('')}
+        ${(I.spawns || []).map(s => `<span>spawn</span><span>${s.count} x ${s.type}</span>`).join('')}
+      </div></div>`; }).join('')}
+    <div class="row"><label for="speed" class="label" style="margin:0">Speed</label><input type="range" id="speed" min="0.1" max="2" step="0.05" value="1"><span class="legend" id="speedOut"></span></div>
+    <div class="toggles"><label><input type="checkbox" id="turntable" ${controls.autoRotate ? 'checked' : ''}> Turntable</label></div>`;
+  wireCommon();
+}
+
+/* ---------- list, mode, hash ---------- */
+function buildList() {
+  const list = $('list');
+  for (const g of DATA.groups) {
+    const items = DATA.assets.filter(a => a.group === g); if (!items.length) continue;
+    const sec = document.createElement('section'); sec.className = 'group'; sec.dataset.group = g;
+    sec.innerHTML = `<h3>${GROUP_TITLES[g]}<i>${items.length}</i></h3>` + items.map(a =>
+      `<button type="button" class="item" data-name="${a.name}"><span>${a.name.replace(/_/g, ' ')}</span><small>${a.tris.toLocaleString()}</small></button>`).join('');
+    list.appendChild(sec);
+  }
+  list.addEventListener('click', e => { const b = e.target.closest('.item'); if (b) { setMode('models', false); showModel(b.dataset.name); } });
+  $('search').addEventListener('input', e => {
+    const q = e.target.value.trim().toLowerCase().replace(/\s+/g, '_');
+    list.querySelectorAll('.group').forEach(sec => {
+      let any = false;
+      sec.querySelectorAll('.item').forEach(b => { const hit = !q || b.dataset.name.toLowerCase().includes(q); b.hidden = !hit; any ||= hit; });
+      sec.hidden = !any;
+    });
+  });
+  const clips = DATA.assets.reduce((s, a) => s + a.clips.length, 0);
+  $('count').textContent = `${DATA.assets.length} models \u00b7 ${clips} clips`;
+}
+function markList(name) { document.querySelectorAll('.item').forEach(b => b.setAttribute('aria-current', String(b.dataset.name === name))); }
+function setMode(m, go = true) {
+  mode = m;
+  $('modeModels').setAttribute('aria-pressed', String(m === 'models'));
+  $('modeWorld').setAttribute('aria-pressed', String(m === 'world'));
+  $('islandPick').hidden = m !== 'world';
+  if (go) { if (m === 'world') showWorld($('islandPick').value); else showModel(lastModel || 'Skitter'); }
+}
+let lastModel = 'Skitter';
+const setHash = h => { const v = '#' + h.replace(/_/g, '-'); if (location.hash !== v) history.replaceState(null, '', v); if (!h.startsWith('world-')) lastModel = h; };
+function route() {
+  const h = decodeURIComponent(location.hash.slice(1));
+  if (h.startsWith('world-')) { const k = h.slice(6); if (['skyreach', 'verdant', 'warden', 'all'].includes(k)) { $('islandPick').value = k; setMode('world', false); return showWorld(k); } }
+  const name = DATA.assets.find(a => a.name.replace(/_/g, '-') === h)?.name;
+  setMode('models', false); return showModel(name || 'Skitter');
+}
+$('modeModels').addEventListener('click', () => setMode('models'));
+$('modeWorld').addEventListener('click', () => setMode('world'));
+$('islandPick').addEventListener('change', e => showWorld(e.target.value));
+addEventListener('hashchange', route);
+
+/* ---------- utilities and loop ---------- */
+function setBusy(on) { $('loading').hidden = !on; }
+function escapeHtml(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+function mulberry(seed) { let s = seed >>> 0; return () => { s = (s + 0x6D2B79F5) | 0; let t = Math.imul(s ^ (s >>> 15), 1 | s); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+new ResizeObserver(() => {
+  const w = stage.clientWidth, h = stage.clientHeight; if (!w || !h) return;
+  renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+}).observe(stage);
+const clock = new THREE.Clock();
+renderer.setAnimationLoop(() => {
+  const dt = Math.min(clock.getDelta(), 0.1);
+  for (const m of mixers) m.update(dt);
+  controls.update();
+  renderer.render(scene, camera);
+});
+
+controls.autoRotate = !reduceMotion;
+try {
+  DATA = await fetch('viewer.json').then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
+  buildList();
+  await route();
+} catch (err) {
+  console.error(err);
+  $('loading').hidden = false; $('loading').textContent = 'Could not load the art kit: ' + err.message;
+}
+</script>
+
+</body>
+</html>
