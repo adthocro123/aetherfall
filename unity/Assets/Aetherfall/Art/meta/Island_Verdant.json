@@ -1,0 +1,17 @@
+{
+  "name": "Island_Verdant",
+  "kind": "world",
+  "group": "islands",
+  "triangles": 5736,
+  "fbx": "fbx/Island_Verdant.fbx",
+  "glb": "glb/Island_Verdant.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {},
+  "hitSpheres": [],
+  "notes": "Verdant Shelf: place at layout.json islands.verdant.position. MeshCollider on the island; EdgeWall is collider-only (disable its renderer) if you would rather wall the edge than clamp to edgeRadii."
+}

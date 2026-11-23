@@ -1,0 +1,17 @@
+{
+  "name": "Grass_A",
+  "kind": "prop",
+  "group": "nature",
+  "triangles": 60,
+  "fbx": "fbx/Grass_A.fbx",
+  "glb": "glb/Grass_A.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {},
+  "hitSpheres": [],
+  "notes": "GPU-instance these (the web scatters 500-1500 per island)."
+}

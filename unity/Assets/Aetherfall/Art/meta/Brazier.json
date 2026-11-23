@@ -1,0 +1,29 @@
+{
+  "name": "Brazier",
+  "kind": "prop",
+  "group": "structures",
+  "triangles": 216,
+  "fbx": "fbx/Brazier.fbx",
+  "glb": "glb/Brazier.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {
+    "Flame": {
+      "bone": null,
+      "position": [
+        0,
+        1.75,
+        0
+      ]
+    }
+  },
+  "hitSpheres": [],
+  "notes": "Blue aether fire VFX and a cool point light at the Flame socket. Collider radius 0.55.",
+  "collider": {
+    "radius": 0.55
+  }
+}

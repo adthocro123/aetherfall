@@ -1,0 +1,17 @@
+{
+  "name": "WardenRocks",
+  "kind": "prop",
+  "group": "creatures",
+  "triangles": 140,
+  "fbx": "fbx/WardenRocks.fbx",
+  "glb": "glb/WardenRocks.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {},
+  "hitSpheres": [],
+  "notes": "Orbit each child around the Warden (radius 2.8-3.8 m, heights 1-5 m) from code; they rise with the Wake clip (web: rocks drift up as it wakes)."
+}

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Aetherfall/Scenes/World.unity
+    guid: d774ec98c9585864086125bfb7bd65f0
+  - enabled: 1
+    path: Assets/Scenes/SampleScene.unity
+    guid: 99c9720ab356a0642a771bea13969a05
+  m_configObjects:
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: b7474d4569adb7a4c833db6d8e6466ce, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 0205720a311d87642826e9d9b30b5d62, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 82728ca8f10c52d44931df45c496be04, type: 2}

@@ -1,0 +1,21 @@
+{
+  "name": "Tree_Aether_A",
+  "kind": "prop",
+  "group": "nature",
+  "triangles": 488,
+  "fbx": "fbx/Tree_Aether_A.fbx",
+  "glb": "glb/Tree_Aether_A.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {},
+  "hitSpheres": [],
+  "notes": "Aether tree. Collider: a capsule of radius 0.4 x scale at the trunk. Glow: add a soft light or sprite near the crystals.",
+  "collider": {
+    "radius": 0.4,
+    "height": 2.4
+  }
+}

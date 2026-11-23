@@ -1,0 +1,244 @@
+{
+  "name": "StoneWarden",
+  "kind": "creature",
+  "group": "creatures",
+  "triangles": 2514,
+  "fbx": "fbx/StoneWarden.fbx",
+  "glb": "glb/StoneWarden.glb",
+  "bones": 19,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "Generic"
+  },
+  "clips": [
+    {
+      "name": "Dormant",
+      "take": "StoneWarden|Dormant",
+      "frames": 60,
+      "fps": 30,
+      "seconds": 2.0,
+      "loop": true,
+      "note": "Asleep in the arena. Keep the eye and core emission dim."
+    },
+    {
+      "name": "Wake",
+      "take": "StoneWarden|Wake",
+      "frames": 84,
+      "fps": 30,
+      "seconds": 2.8,
+      "loop": false,
+      "note": "2.8 s: rises; roar peaks around 1.2 s (play the roar sound then). Ramp the eye glow up."
+    },
+    {
+      "name": "Idle",
+      "take": "StoneWarden|Idle",
+      "frames": 90,
+      "fps": 30,
+      "seconds": 3.0,
+      "loop": true,
+      "note": ""
+    },
+    {
+      "name": "Walk",
+      "take": "StoneWarden|Walk",
+      "frames": 48,
+      "fps": 30,
+      "seconds": 1.6,
+      "loop": true,
+      "note": "Stomp; shake the camera a little on each footfall (t = 0 and 0.5)."
+    },
+    {
+      "name": "SlamWindup",
+      "take": "StoneWarden|SlamWindup",
+      "frames": 35,
+      "fps": 30,
+      "seconds": 1.167,
+      "loop": false,
+      "note": "1.15 s (0.9 s in phase 2: play faster). Ramp the fist glow up."
+    },
+    {
+      "name": "Slam",
+      "take": "StoneWarden|Slam",
+      "frames": 11,
+      "fps": 30,
+      "seconds": 0.367,
+      "loop": false,
+      "note": "0.35 s; the fists hit at about 0.16 s: spawn the shockwave there."
+    },
+    {
+      "name": "Stuck",
+      "take": "StoneWarden|Stuck",
+      "frames": 60,
+      "fps": 30,
+      "seconds": 2.0,
+      "loop": true,
+      "note": "Fists stuck, doors open: the core is exposed (3.2x damage). The game holds this 2.7 s."
+    },
+    {
+      "name": "Recover",
+      "take": "StoneWarden|Recover",
+      "frames": 24,
+      "fps": 30,
+      "seconds": 0.8,
+      "loop": false,
+      "note": "0.8 s: pulls free, doors close."
+    },
+    {
+      "name": "SweepWindup",
+      "take": "StoneWarden|SweepWindup",
+      "frames": 26,
+      "fps": 30,
+      "seconds": 0.867,
+      "loop": false,
+      "note": "0.85 s (0.66 s in phase 2)."
+    },
+    {
+      "name": "Sweep",
+      "take": "StoneWarden|Sweep",
+      "frames": 15,
+      "fps": 30,
+      "seconds": 0.5,
+      "loop": false,
+      "note": "0.5 s; hits between 0.14 and 0.4 s if the player is in front within 5.6 m."
+    },
+    {
+      "name": "VolleyWindup",
+      "take": "StoneWarden|VolleyWindup",
+      "frames": 29,
+      "fps": 30,
+      "seconds": 0.967,
+      "loop": false,
+      "note": "0.95 s; then 5 orbs (7 in phase 2) from the Core socket. Doors part slightly."
+    },
+    {
+      "name": "Summon",
+      "take": "StoneWarden|Summon",
+      "frames": 60,
+      "fps": 30,
+      "seconds": 2.0,
+      "loop": false,
+      "note": "2 s; roar and spawn the adds at about 1.1 s."
+    },
+    {
+      "name": "Hit",
+      "take": "StoneWarden|Hit",
+      "frames": 10,
+      "fps": 30,
+      "seconds": 0.333,
+      "loop": false,
+      "note": "Small flinch: the Warden cannot be staggered."
+    },
+    {
+      "name": "Death",
+      "take": "StoneWarden|Death",
+      "frames": 84,
+      "fps": 30,
+      "seconds": 2.8,
+      "loop": false,
+      "note": "2.8 s: collapses forward and sinks; fade the eye and core out, burst rock particles."
+    }
+  ],
+  "sockets": {
+    "Core": {
+      "bone": "Core",
+      "position": [
+        0,
+        3.58,
+        1.05
+      ]
+    },
+    "Eye": {
+      "bone": "Head",
+      "position": [
+        0,
+        4.99,
+        0.62
+      ]
+    },
+    "Fist.L": {
+      "bone": "Fist.L",
+      "position": [
+        -1.6,
+        1.15,
+        0.05
+      ]
+    },
+    "Fist.R": {
+      "bone": "Fist.R",
+      "position": [
+        1.6,
+        1.15,
+        0.05
+      ]
+    }
+  },
+  "hitSpheres": [
+    {
+      "bone": "Core",
+      "center": [
+        0,
+        3.58,
+        0.62
+      ],
+      "radius": 0.62,
+      "damageMult": 3.2,
+      "when": "doors open (Stuck, and briefly VolleyWindup)"
+    },
+    {
+      "bone": "Torso",
+      "center": [
+        0,
+        3.55,
+        0
+      ],
+      "radius": 1.45,
+      "damageMult": 0.7,
+      "when": "always"
+    },
+    {
+      "bone": "Head",
+      "center": [
+        0,
+        4.98,
+        0.12
+      ],
+      "radius": 0.62,
+      "damageMult": 1.0,
+      "when": "always"
+    },
+    {
+      "bone": "Fist.L",
+      "center": [
+        -1.6,
+        1.62,
+        0.05
+      ],
+      "radius": 0.62,
+      "damageMult": 0.45,
+      "when": "always"
+    },
+    {
+      "bone": "Fist.R",
+      "center": [
+        1.6,
+        1.62,
+        0.05
+      ],
+      "radius": 0.62,
+      "damageMult": 0.45,
+      "when": "always"
+    },
+    {
+      "bone": "Hips",
+      "center": [
+        0,
+        1.2,
+        0
+      ],
+      "radius": 0.95,
+      "damageMult": 0.55,
+      "when": "always"
+    }
+  ],
+  "notes": "States in warden.js -> clips: dormant=Dormant, waking=Wake, chase=Walk/Idle, slamWind=SlamWindup, slam=Slam, stuck=Stuck, recover=Recover, sweepWind=SweepWindup, sweep=Sweep, volleyWind=VolleyWindup, summon=Summon. Phase 2 (below half health) plays the windups 1.28x faster. Orbiting rocks are the separate WardenRocks model."
+}

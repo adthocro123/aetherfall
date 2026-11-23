@@ -32,11 +32,20 @@ def gather(objs):
 
 
 def select_only(objs):
+    """Select exactly objs. Blender adds newly linked objects to the view layer lazily, so update it first:
+    without that, objects built since the last update can't be selected yet, and the FBX exporter
+    (use_selection) writes an empty file without any error. Rigged assets got away with it because
+    scene.frame_set() updates the view layer."""
+    vl = bpy.context.view_layer
+    vl.update()
     keep = set(objs)
-    for o in bpy.context.view_layer.objects:
+    for o in vl.objects:
         o.select_set(o in keep)
     if objs:
-        bpy.context.view_layer.objects.active = objs[0]
+        vl.objects.active = objs[0]
+    missing = [o.name for o in objs if not o.select_get()]
+    if missing:
+        raise RuntimeError(f'could not select {", ".join(missing)} for export')
 
 
 def export_fbx(path, objs, animated):

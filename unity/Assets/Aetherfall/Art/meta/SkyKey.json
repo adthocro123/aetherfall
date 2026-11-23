@@ -1,0 +1,17 @@
+{
+  "name": "SkyKey",
+  "kind": "prop",
+  "group": "structures",
+  "triangles": 444,
+  "fbx": "fbx/SkyKey.fbx",
+  "glb": "glb/SkyKey.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {},
+  "hitSpheres": [],
+  "notes": "Spawned over the arena centre after the Warden falls: spin 1.4 rad/s about up, bob 0.12 m; golden glow sprite. Interact radius 2.4."
+}

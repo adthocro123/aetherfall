@@ -1,0 +1,148 @@
+{
+  "name": "Thornback",
+  "kind": "creature",
+  "group": "creatures",
+  "triangles": 1598,
+  "fbx": "fbx/Thornback.fbx",
+  "glb": "glb/Thornback.glb",
+  "bones": 20,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "Generic"
+  },
+  "clips": [
+    {
+      "name": "Idle",
+      "take": "Thornback|Idle",
+      "frames": 72,
+      "fps": 30,
+      "seconds": 2.4,
+      "loop": true,
+      "note": ""
+    },
+    {
+      "name": "Walk",
+      "take": "Thornback|Walk",
+      "frames": 32,
+      "fps": 30,
+      "seconds": 1.067,
+      "loop": true,
+      "note": "Wander (about 1 m/s)."
+    },
+    {
+      "name": "Run",
+      "take": "Thornback|Run",
+      "frames": 18,
+      "fps": 30,
+      "seconds": 0.6,
+      "loop": true,
+      "note": "Chase (about 2.8 m/s)."
+    },
+    {
+      "name": "Paw",
+      "take": "Thornback|Paw",
+      "frames": 30,
+      "fps": 30,
+      "seconds": 1.0,
+      "loop": true,
+      "note": "Pawing before a charge (0.95 s in the game). Pulse the thorn glow here."
+    },
+    {
+      "name": "Charge",
+      "take": "Thornback|Charge",
+      "frames": 12,
+      "fps": 30,
+      "seconds": 0.4,
+      "loop": true,
+      "note": "Charging (11.5 m/s)."
+    },
+    {
+      "name": "Skid",
+      "take": "Thornback|Skid",
+      "frames": 15,
+      "fps": 30,
+      "seconds": 0.5,
+      "loop": false,
+      "note": "Braking after a charge that hit (0.5 s)."
+    },
+    {
+      "name": "Dazed",
+      "take": "Thornback|Dazed",
+      "frames": 40,
+      "fps": 30,
+      "seconds": 1.333,
+      "loop": true,
+      "note": "After hitting a tree or rock: takes 1.6x damage. Spawn the circling stars at the Head socket."
+    },
+    {
+      "name": "Gore",
+      "take": "Thornback|Gore",
+      "frames": 27,
+      "fps": 30,
+      "seconds": 0.9,
+      "loop": false,
+      "note": "Close-range attack: tusk toss lands at about 0.55 s."
+    },
+    {
+      "name": "Hit",
+      "take": "Thornback|Hit",
+      "frames": 8,
+      "fps": 30,
+      "seconds": 0.267,
+      "loop": false,
+      "note": ""
+    },
+    {
+      "name": "Death",
+      "take": "Thornback|Death",
+      "frames": 36,
+      "fps": 30,
+      "seconds": 1.2,
+      "loop": false,
+      "note": "Topples onto its side."
+    }
+  ],
+  "sockets": {
+    "Head": {
+      "bone": "Head",
+      "position": [
+        0,
+        1.45,
+        0.95
+      ]
+    },
+    "Tusks": {
+      "bone": "Head",
+      "position": [
+        0,
+        0.95,
+        1.46
+      ]
+    }
+  },
+  "hitSpheres": [
+    {
+      "bone": "Chest",
+      "center": [
+        0,
+        1.1,
+        -0.1
+      ],
+      "radius": 0.78,
+      "damageMult": 1.0,
+      "when": "always"
+    },
+    {
+      "bone": "Head",
+      "center": [
+        0,
+        0.92,
+        1.05
+      ],
+      "radius": 0.48,
+      "damageMult": 1.0,
+      "when": "always"
+    }
+  ],
+  "notes": "States in types.js -> clips: idle=Idle/Walk, chase=Run, paw=Paw, charge=Charge, skid=Skid, dazed=Dazed, gore=Gore. While dazed it takes 1.6x damage. Pulse the thorns' emission during Paw/Charge from code."
+}

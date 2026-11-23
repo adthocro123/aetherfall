@@ -1,0 +1,20 @@
+{
+  "name": "Crystal_Violet_B",
+  "kind": "prop",
+  "group": "nature",
+  "triangles": 230,
+  "fbx": "fbx/Crystal_Violet_B.fbx",
+  "glb": "glb/Crystal_Violet_B.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {},
+  "hitSpheres": [],
+  "notes": "Violet crystal cluster; add a soft glow sprite or light 1 m up.",
+  "collider": {
+    "radius": 0.7
+  }
+}

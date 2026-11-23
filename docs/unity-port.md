@@ -63,7 +63,7 @@ Then add an `AssetPostprocessor` (Editor folder) for that folder that sets, for 
 
 | Setting | Value | Why |
 | --- | --- | --- |
-| `bakeAxisConversion` | `true` | The FBX files come from Blender; this removes the -90 degree X rotation on import |
+| `bakeAxisConversion` | `false`, and bake the root's rotation into its mesh | The exporter writes Y-up files with Blender's axis conversion as a -90 degree X rotation on each top-level object. `bakeAxisConversion` can't remove that (on these files it turns every model 180 degrees about Y instead), and single-object models import with that rotation on their root, so the postprocessor bakes it into the mesh |
 | `importNormals` | Import | Flat shading is baked into the normals |
 | Materials | Remap `AF_VertexColor` to `M_VertexColor` and `AF_Glow` to `M_Glow` (see below) | One shared material keeps draw calls down |
 | `animationType` | Generic for creatures, **Human** for `Pell` (T-pose, bone names match Unity's, avatar auto-maps), None for props | |

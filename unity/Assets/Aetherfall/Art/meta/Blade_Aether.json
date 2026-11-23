@@ -1,0 +1,34 @@
+{
+  "name": "Blade_Aether",
+  "kind": "gear",
+  "group": "gear",
+  "triangles": 216,
+  "fbx": "fbx/Blade_Aether.fbx",
+  "glb": "glb/Blade_Aether.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {
+    "Base": {
+      "bone": null,
+      "position": [
+        0,
+        0,
+        0.14
+      ]
+    },
+    "Tip": {
+      "bone": null,
+      "position": [
+        0,
+        0,
+        1.12
+      ]
+    }
+  },
+  "hitSpheres": [],
+  "notes": "Aether Blade (damage x1.0). The starting blade: straight, slim, cyan. Grip centred on the origin; Base/Tip empties give the blade segment for the sweep test. The _Glow child uses AF_Glow: give it an additive shader."
+}

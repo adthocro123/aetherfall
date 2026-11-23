@@ -1,0 +1,31 @@
+# Unity: generated or per-machine folders (see docs/unity-port.md). Keep .meta files.
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild*/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+
+# Screenshots written by Aetherfall > Capture World Screenshots
+/Captures/
+
+# IDE files Unity regenerates
+*.csproj
+*.sln
+*.slnx
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+.vs/
+.vscode/
+.idea/
+
+# Build outputs
+*.apk
+*.aab
+*.unitypackage
+crashlytics-build.properties

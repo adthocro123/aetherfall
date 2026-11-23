@@ -1,0 +1,26 @@
+{
+    "name": "Aetherfall.Editor",
+    "rootNamespace": "Aetherfall.EditorTools",
+    "references": [
+        "Aetherfall",
+        "Unity.RenderPipelines.Core.Runtime",
+        "Unity.RenderPipelines.Universal.Runtime",
+        "Unity.XR.Management",
+        "Unity.XR.Management.Editor",
+        "Unity.XR.OpenXR",
+        "Unity.XR.OpenXR.Editor",
+        "Unity.XR.CoreUtils",
+        "Unity.XR.CoreUtils.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
