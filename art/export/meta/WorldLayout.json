@@ -1,0 +1,62 @@
+{
+  "name": "WorldLayout",
+  "kind": "data",
+  "notes": "Wrote art/export/layout.json",
+  "counts": {
+    "skyreach": {
+      "props": 5,
+      "scatter": {
+        "Crystal_Cyan_A": 3,
+        "Crystal_Cyan_B": 2,
+        "Flowers_A": 100,
+        "Grass_A": 900,
+        "Rock_A": 4,
+        "Rock_B": 4,
+        "Rock_C": 3,
+        "Rock_D": 3,
+        "Tree_Blossom_A": 4,
+        "Tree_Blossom_B": 3,
+        "Tree_Pine_A": 4,
+        "Tree_Pine_B": 4,
+        "Tree_Round_A": 6,
+        "Tree_Round_B": 6
+      }
+    },
+    "verdant": {
+      "props": 3,
+      "scatter": {
+        "Crystal_Cyan_A": 5,
+        "Crystal_Cyan_B": 5,
+        "Crystal_Violet_A": 3,
+        "Crystal_Violet_B": 3,
+        "Flowers_A": 167,
+        "Grass_A": 1500,
+        "Rock_A": 6,
+        "Rock_B": 6,
+        "Rock_C": 5,
+        "Rock_D": 5,
+        "Tree_Aether_A": 5,
+        "Tree_Aether_B": 5,
+        "Tree_Blossom_A": 6,
+        "Tree_Blossom_B": 6,
+        "Tree_Pine_A": 3,
+        "Tree_Pine_B": 3,
+        "Tree_Round_A": 7,
+        "Tree_Round_B": 7
+      }
+    },
+    "warden": {
+      "props": 16,
+      "scatter": {
+        "Flowers_A": 56,
+        "Grass_A": 500,
+        "Rock_A": 4,
+        "Rock_B": 4,
+        "Rock_C": 4,
+        "Rock_D": 4,
+        "Tree_Pine_A": 5,
+        "Tree_Pine_B": 4
+      }
+    }
+  }
+}

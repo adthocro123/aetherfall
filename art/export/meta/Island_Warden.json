@@ -1,0 +1,17 @@
+{
+  "name": "Island_Warden",
+  "kind": "world",
+  "group": "islands",
+  "triangles": 5736,
+  "fbx": "fbx/Island_Warden.fbx",
+  "glb": "glb/Island_Warden.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {},
+  "hitSpheres": [],
+  "notes": "Warden's Isle: place at layout.json islands.warden.position. MeshCollider on the island; EdgeWall is collider-only (disable its renderer) if you would rather wall the edge than clamp to edgeRadii."
+}

@@ -1,0 +1,17 @@
+{
+  "name": "FarIslands",
+  "kind": "world",
+  "group": "islands",
+  "triangles": 23000,
+  "fbx": "fbx/FarIslands.fbx",
+  "glb": "glb/FarIslands.glb",
+  "bones": 0,
+  "unity": {
+    "note": "FBX: Blender -Y forward becomes Unity +Z. Positions below are in the model root's space, Unity axes.",
+    "rig": "None"
+  },
+  "clips": [],
+  "sockets": {},
+  "hitSpheres": [],
+  "notes": "Distant scenery in world space: place at the origin. No collider needed."
+}

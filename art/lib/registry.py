@@ -1,6 +1,7 @@
 """Asset registry: each asset module decorates its build function with @asset(...)."""
 
 REGISTRY = {}
+OUT = ['export']  # set by build.py: assets that write data files put them here
 
 
 class Result:

@@ -24,6 +24,7 @@ argv = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else sys.argv[1:]
 import bpy  # noqa: E402
 
 from lib import core, export, forms, preview  # noqa: E402
+from lib import registry  # noqa: E402
 from lib.registry import REGISTRY  # noqa: E402
 import assets  # noqa: E402,F401  (registers everything)
 
@@ -47,12 +48,18 @@ def main():
     if unknown:
         sys.exit(f'Unknown asset or group: {", ".join(unknown)}. Try --list.')
 
+    registry.OUT[0] = a.out
     summary = []
     for name in wanted:
         e = REGISTRY[name]
         t0 = time.time()
         core.reset_scene()
         res = e['build']()
+        if not res.objects:  # data-only assets (the world layout)
+            export.write_json(os.path.join(a.out, 'meta', f'{name}.json'), dict(name=name, kind=e['kind'], notes=res.notes, **res.extra))
+            print(f'[art] {name}: {res.notes}', flush=True)
+            summary.append((name, 0, 0, [], time.time() - t0))
+            continue
         animated = bool(res.rig and res.clips)
         objs = export.gather(res.objects)
         tris = sum(forms.tri_count(o) for o in objs if o.type == 'MESH')
@@ -66,7 +73,8 @@ def main():
         export.export_fbx(fbx, res.objects, animated)
         export.export_glb(glb, res.objects, animated)
         info = export.glb_info(glb)
-        export.save_blend(os.path.join(a.blend, f'{name}.blend'))
+        if e['kind'] != 'world' or name != 'FarIslands':
+            export.save_blend(os.path.join(a.blend, f'{name}.blend'))
 
         meta = dict(
             name=name, kind=e['kind'], group=e['group'], triangles=tris,
@@ -84,7 +92,10 @@ def main():
         if not a.no_preview:
             pv = res.preview
             preview.setup(dark=pv.get('dark', False))
-            vis = [o for o in objs if o.type == 'MESH']
+            for o in objs:
+                if o.name.startswith('EdgeWall'):
+                    o.hide_render = True  # collider-only geometry
+            vis = [o for o in objs if o.type == 'MESH' and not o.hide_render]
             preview.frame(vis, pv.get('yaw', -32), pv.get('pitch', 16), pv.get('margin', 1.08), ground_z=pv.get('ground_z'))
             preview.render(os.path.join(a.previews, f'{name}.jpg'), pv.get('size', 512))
             if animated and pv.get('strip', True):
